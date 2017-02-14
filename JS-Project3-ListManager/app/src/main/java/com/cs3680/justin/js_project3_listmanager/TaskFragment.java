@@ -8,6 +8,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 /**
@@ -17,6 +20,9 @@ import android.widget.EditText;
 public class TaskFragment extends Fragment {
     private Task mTask;
     private EditText mTitleField;
+    private Button mDueDateButton;
+    private Button mCompleteDateButton;
+    private CheckBox mCompletedCheckbox;
 
     @Override
     public void onCreate(Bundle savedInstanceState ) {
@@ -43,6 +49,22 @@ public class TaskFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 //This space intentionally left blank
+            }
+        });
+
+        mDueDateButton = (Button)v.findViewById(R.id.task_due_date);
+        mDueDateButton.setText(mTask.getmDueDate().toString());
+        mDueDateButton.setEnabled(false);
+
+        mCompleteDateButton = (Button)v.findViewById(R.id.task_completed_date);
+        mCompleteDateButton.setText(mTask.getmCompleteDate().toString());
+        mCompleteDateButton.setEnabled(false);
+
+        mCompletedCheckbox = (CheckBox)v.findViewById(R.id.task_completed);
+        mCompletedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mTask.setmCompleted(isChecked);
             }
         });
 
