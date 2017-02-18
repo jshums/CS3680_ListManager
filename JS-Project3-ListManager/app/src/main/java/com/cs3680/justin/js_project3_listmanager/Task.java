@@ -1,5 +1,6 @@
 package com.cs3680.justin.js_project3_listmanager;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -17,6 +18,8 @@ public class Task {
     public Task() {
         // Generate unique identifier
         mId = UUID.randomUUID();
+        mDueDate = new Date();
+        mCompleteDate = new Date();
     }
 
     public UUID getId(){
@@ -31,7 +34,8 @@ public class Task {
         mTitle = title;
     }
 
-    public Date getmDueDate() {
+    public Date getDueDate() {
+
         return mDueDate;
     }
 
@@ -39,7 +43,7 @@ public class Task {
         this.mDueDate = mDueDate;
     }
 
-    public Date getmCompleteDate() {
+    public Date getCompleteDate() {
         return mCompleteDate;
     }
 
@@ -51,7 +55,7 @@ public class Task {
         return mCompleted;
     }
 
-    public void setmCompleted(boolean mCompleted) {
+    public void setCompleted(boolean mCompleted) {
         this.mCompleted = mCompleted;
     }
 

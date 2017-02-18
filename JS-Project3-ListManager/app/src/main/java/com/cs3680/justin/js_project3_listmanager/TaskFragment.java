@@ -1,6 +1,5 @@
 package com.cs3680.justin.js_project3_listmanager;
 
-import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -53,20 +52,25 @@ public class TaskFragment extends Fragment {
         });
 
         mDueDateButton = (Button)v.findViewById(R.id.task_due_date);
-        mDueDateButton.setText(mTask.getmDueDate().toString());
+        mDueDateButton.setText(mTask.getDueDate().toString());
         mDueDateButton.setEnabled(false);
 
         mCompleteDateButton = (Button)v.findViewById(R.id.task_completed_date);
-        mCompleteDateButton.setText(mTask.getmCompleteDate().toString());
+        mCompleteDateButton.setText(mTask.getCompleteDate().toString());
         mCompleteDateButton.setEnabled(false);
 
         mCompletedCheckbox = (CheckBox)v.findViewById(R.id.task_completed);
         mCompletedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mTask.setmCompleted(isChecked);
+                mTask.setCompleted(isChecked);
             }
         });
+
+        /* ADD CONDITIONAL TEXT FORMATTING HERE
+        if ()
+        mCompletedCheckbox.setTextColor(android.graphics.Color.RED);
+        */
 
         return v;
     }
