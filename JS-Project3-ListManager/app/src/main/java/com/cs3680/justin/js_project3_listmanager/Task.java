@@ -51,7 +51,7 @@ public class Task {
         this.mCompleteDate = mCompleteDate;
     }
 
-    public boolean ismCompleted() {
+    public boolean isCompleted() {
         return mCompleted;
     }
 

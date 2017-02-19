@@ -12,6 +12,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.UUID;
+
 /**
  * Created by justi on 2/12/2017.
  */
@@ -26,7 +28,9 @@ public class TaskFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
-        mTask = new Task();
+        UUID taskId = (UUID) getActivity().getIntent()
+                .getSerializableExtra(TaskActivity.EXTRA_TASK_ID);
+        mTask = TaskList.get(getActivity()).getTask(taskId);
     }
 
     @Override
@@ -34,6 +38,7 @@ public class TaskFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_task, container, false);
 
         mTitleField = (EditText)v.findViewById(R.id.task_title);
+        mTitleField.setText(mTask.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -60,6 +65,7 @@ public class TaskFragment extends Fragment {
         mCompleteDateButton.setEnabled(false);
 
         mCompletedCheckbox = (CheckBox)v.findViewById(R.id.task_completed);
+        mCompletedCheckbox.setChecked(mTask.isCompleted());
         mCompletedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
