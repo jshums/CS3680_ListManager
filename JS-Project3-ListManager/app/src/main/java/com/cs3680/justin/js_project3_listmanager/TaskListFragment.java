@@ -36,13 +36,23 @@ public class TaskListFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateUI();
+    }
+
     private void updateUI(){
         TaskList taskList = TaskList.get(getActivity());
 
         List<Task> tasks = taskList.getTasks();
 
-        mAdapter = new TaskAdapter(tasks);
-        mTaskRecyclerView.setAdapter(mAdapter);
+        if (mAdapter == null) {
+            mAdapter = new TaskAdapter(tasks);
+            mTaskRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     private class TaskHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

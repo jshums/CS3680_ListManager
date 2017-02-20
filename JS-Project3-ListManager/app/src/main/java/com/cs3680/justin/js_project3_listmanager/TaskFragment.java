@@ -19,17 +19,27 @@ import java.util.UUID;
  */
 
 public class TaskFragment extends Fragment {
+    private static final String ARG_TASK_ID = "crime_id";
+
     private Task mTask;
     private EditText mTitleField;
     private Button mDueDateButton;
     private Button mCompleteDateButton;
     private CheckBox mCompletedCheckbox;
 
+    public static TaskFragment newinstance(UUID taskId) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_TASK_ID, taskId);
+
+        TaskFragment fragment = new TaskFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
-        UUID taskId = (UUID) getActivity().getIntent()
-                .getSerializableExtra(TaskActivity.EXTRA_TASK_ID);
+        UUID taskId = (UUID) getArguments().getSerializable(ARG_TASK_ID);
         mTask = TaskList.get(getActivity()).getTask(taskId);
     }
 
