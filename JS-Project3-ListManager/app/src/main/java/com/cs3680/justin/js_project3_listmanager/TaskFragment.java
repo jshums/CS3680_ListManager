@@ -107,11 +107,10 @@ public class TaskFragment extends Fragment {
         mDeleteTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TaskList.get(getActivity()).removeTask(taskId);
-                //Couldn't figure this one out
+                TaskList.get(getActivity()).removeTask(mTask);
+                getActivity().finish();
             }
         });
-
 
         return v;
     }

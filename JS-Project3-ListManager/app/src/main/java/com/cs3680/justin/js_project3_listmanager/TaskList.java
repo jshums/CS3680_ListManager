@@ -50,11 +50,12 @@ public class TaskList {
         }
         return null;
     }
-    public void removeTask (UUID id) {
-        for (Task task : mTasks) {
-            if (task.getId().equals(id)) {
-                mTasks.remove(id);
-            }
-        }
+
+    public void removeTask (Task task) {
+        mTasks.remove(getTaskPosition(task));
+    }
+
+    public int getTaskPosition (Task task) {
+                return mTasks.indexOf(task);
     }
 }
