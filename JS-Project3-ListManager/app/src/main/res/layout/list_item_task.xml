@@ -19,16 +19,34 @@
         android:padding="4dp"/>
     <TextView
         android:id="@+id/list_item_task_due_date_text_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/list_item_task_completed_check_box"
         android:layout_below="@id/list_item_task_title_text_view"
         android:padding="4dp"/>
     <TextView
+        android:id="@+id/list_item_task_due_date_text_label"
+        android:text="@string/task_due_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/list_item_task_due_date_text_view"
+        android:layout_below="@id/list_item_task_title_text_view"
+        android:layout_alignParentLeft="true"
+        android:padding="4dp"/>
+    <TextView
         android:id="@+id/list_item_task_comp_date_text_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/list_item_task_completed_check_box"
         android:layout_below="@id/list_item_task_due_date_text_view"
+        android:padding="4dp"/>
+    <TextView
+        android:id="@+id/list_item_task_comp_date_text_label"
+        android:text="@string/task_comp_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/list_item_task_comp_date_text_view"
+        android:layout_below="@id/list_item_task_due_date_text_view"
+        android:layout_alignParentLeft="true"
         android:padding="4dp"/>
 </RelativeLayout>

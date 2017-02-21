@@ -6,11 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -21,6 +23,12 @@ import java.util.List;
 public class TaskListFragment extends Fragment {
     private RecyclerView mTaskRecyclerView;
     private TaskAdapter mAdapter;
+
+    @Override
+    public void onCreate (Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,6 +48,27 @@ public class TaskListFragment extends Fragment {
     public void onResume(){
         super.onResume();
         updateUI();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_task_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_new_task:
+                Task task = new Task();
+                TaskList.get(getActivity()).addTask(task);
+                Intent intent = TaskPagerActivity
+                        .newIntent(getActivity(), task.getId());
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void updateUI(){
@@ -80,14 +109,15 @@ public class TaskListFragment extends Fragment {
         public void bindTask (Task task){
             mTask = task;
             mTitleTextView.setText(mTask.getTitle());
-            mCompDateTextView.setText(mTask.getCompleteDate().toString());
             mDueDateTextView.setText(mTask.getDueDate().toString());
             mCompletedCheckBox.setChecked(mTask.isCompleted());
+            mCompletedCheckBox.setEnabled(false);
+            mCompDateTextView.setText(mTask.getCompleteDateText());
         }
 
         @Override
         public void onClick(View v) {
-            Intent intent = TaskActivity.newIntent(getActivity(), mTask.getId());
+            Intent intent = TaskPagerActivity.newIntent(getActivity(), mTask.getId());
             startActivity(intent);
         }
     }

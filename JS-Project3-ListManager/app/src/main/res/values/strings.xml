@@ -1,7 +1,16 @@
 <resources>
-    <string name="app_name">JS-Project3-ListManager</string>
+    <string name="app_name">List Manager</string>
     <string name="task_title_hint">Enter a title for the task</string>
     <string name="task_title_label">Title</string>
     <string name="task_details_label">Details</string>
     <string name="task_completed_label">Completed</string>
+    <string name="task_due_date_label" >Due Date:</string>
+    <string name="task_comp_date_label" >Completed Date:</string>
+    <string name="date_picker_title">Due date for task</string>
+    <string name="new_task">New Task</string>
+    <string name="show_subtitle">Show Subtitle</string>
+    <string name="hide_subtitle">Hide Subtitle</string>
+    <string name="subtitle_format">%1@s tasks</string>
+    <string name="task_delete_text">Delete Task?</string>
+    <string name="doesnt_work_yet">Delete button doesn\'t work yet. Couldn\'t figure it out :(</string>
 </resources>

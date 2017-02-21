@@ -25,13 +25,17 @@ public class TaskList {
     private TaskList(Context context) {
 
         mTasks = new ArrayList<>();
-        for (int i = 0; i < 100; i++)
+        for (int i = 1; i <= 10; i++)
         {
             Task task = new Task();
             task.setTitle("Task #" + i);
             task.setCompleted(i % 2 == 0);
             mTasks.add(task);
         }
+    }
+
+    public void addTask (Task c) {
+        mTasks.add(c);
     }
 
     public List<Task> getTasks() {
@@ -45,5 +49,12 @@ public class TaskList {
             }
         }
         return null;
+    }
+    public void removeTask (UUID id) {
+        for (Task task : mTasks) {
+            if (task.getId().equals(id)) {
+                mTasks.remove(id);
+            }
+        }
     }
 }

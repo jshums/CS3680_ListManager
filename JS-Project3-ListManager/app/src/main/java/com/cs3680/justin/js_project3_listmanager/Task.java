@@ -19,7 +19,6 @@ public class Task {
         // Generate unique identifier
         mId = UUID.randomUUID();
         mDueDate = new Date();
-        mCompleteDate = new Date();
     }
 
     public UUID getId(){
@@ -47,7 +46,15 @@ public class Task {
         return mCompleteDate;
     }
 
-    public void setmCompleteDate(Date mCompleteDate) {
+    public String getCompleteDateText() {
+        if (mCompleteDate != null) {
+            return mCompleteDate.toString();
+        } else {
+            return "";
+        }
+    }
+
+    public void setCompleteDate(Date mCompleteDate) {
         this.mCompleteDate = mCompleteDate;
     }
 
@@ -57,6 +64,8 @@ public class Task {
 
     public void setCompleted(boolean mCompleted) {
         this.mCompleted = mCompleted;
+        if (this.mCompleted == true) {
+            setCompleteDate(new Date());
+        }
     }
-
 }

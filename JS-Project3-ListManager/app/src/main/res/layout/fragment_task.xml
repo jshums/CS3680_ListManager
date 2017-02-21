@@ -22,6 +22,14 @@
         android:layout_height="wrap_content"
         android:text="@string/task_details_label"
         style="?android:listSeparatorTextViewStyle"
+    />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/task_due_date_label"
+        style="?android:listSeparatorTextViewStyle"
+        android:gravity="center"
         />
     <Button android:id="@+id/task_due_date"
         android:layout_width="match_parent"
@@ -29,11 +37,19 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         />
-    <Button android:id="@+id/task_completed_date"
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/task_comp_date_label"
+        style="?android:listSeparatorTextViewStyle"
+        android:gravity="center"
+        />
+    <TextView android:id="@+id/task_completed_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        style="?android:listSeparatorTextViewStyle"
         />
     <CheckBox android:id="@+id/task_completed"
         android:layout_width="match_parent"
@@ -42,4 +58,21 @@
         android:layout_marginRight="16dp"
         android:text="@string/task_completed_label"
         />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="bottom"
+        >
+        <Button android:id="@+id/task_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:gravity="end"
+            android:text="@string/task_delete_text"
+            />
+    </LinearLayout>
+
 </LinearLayout>
