@@ -11,6 +11,11 @@
     <string name="show_subtitle">Show Subtitle</string>
     <string name="hide_subtitle">Hide Subtitle</string>
     <string name="subtitle_format">%1@s tasks</string>
-    <string name="task_delete_text">Delete Task?</string>
-    <string name="doesnt_work_yet">Delete button doesn\'t work yet. Couldn\'t figure it out :(</string>
+    <string name="task_delete_text">Delete Task</string>
+   <string name="task_priority_label">Priority:</string>
+    <string-array name="priority_array"  >
+        <item>HIGH</item>
+        <item>MEDIUM</item>
+        <item>LOW</item>
+    </string-array>
 </resources>

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.List;
@@ -89,6 +90,7 @@ public class TaskListFragment extends Fragment {
         private TextView mCompDateTextView;
         private TextView mDueDateTextView;
         private CheckBox mCompletedCheckBox;
+        private TextView mPriorityTextView;
 
         private Task mTask;
 
@@ -104,6 +106,8 @@ public class TaskListFragment extends Fragment {
                     R.id.list_item_task_due_date_text_view);
             mCompletedCheckBox = (CheckBox) itemView.findViewById(
                     R.id.list_item_task_completed_check_box);
+            mPriorityTextView = (TextView) itemView.findViewById(
+                    R.id.list_item_task_priority);
         }
 
         public void bindTask (Task task){
@@ -113,6 +117,7 @@ public class TaskListFragment extends Fragment {
             mCompletedCheckBox.setChecked(mTask.isCompleted());
             mCompletedCheckBox.setEnabled(false);
             mCompDateTextView.setText(mTask.getCompleteDateText());
+            mPriorityTextView.setText(mTask.getmPriority());
         }
 
         @Override

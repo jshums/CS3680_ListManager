@@ -14,6 +14,7 @@ public class Task {
     private Date mDueDate;
     private Date mCompleteDate;
     private boolean mCompleted;
+    private String mPriority;
 
     public Task() {
         // Generate unique identifier
@@ -67,5 +68,13 @@ public class Task {
         if (this.mCompleted == true) {
             setCompleteDate(new Date());
         }
+    }
+
+    public String getmPriority() {
+        return mPriority;
+    }
+
+    public void setmPriority(String mPriority) {
+        this.mPriority = mPriority;
     }
 }
