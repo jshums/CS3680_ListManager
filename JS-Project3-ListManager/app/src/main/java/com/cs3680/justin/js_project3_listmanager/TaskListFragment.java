@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.List;
@@ -81,6 +80,7 @@ public class TaskListFragment extends Fragment {
             mAdapter = new TaskAdapter(tasks);
             mTaskRecyclerView.setAdapter(mAdapter);
         } else {
+            mAdapter.setTasks(tasks);
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -116,8 +116,12 @@ public class TaskListFragment extends Fragment {
             mDueDateTextView.setText(mTask.getDueDate().toString());
             mCompletedCheckBox.setChecked(mTask.isCompleted());
             mCompletedCheckBox.setEnabled(false);
-            mCompDateTextView.setText(mTask.getCompleteDateText());
-            mPriorityTextView.setText(mTask.getmPriority());
+            if (mTask.getCompleteDate() != null) {
+                mCompDateTextView.setText(mTask.getCompleteDate().toString());
+            }
+            if(!mTask.getPriority().equals("[SELECT PRIORITY]")) {
+                mPriorityTextView.setText(mTask.getPriority());
+            }
         }
 
         @Override
@@ -145,11 +149,16 @@ public class TaskListFragment extends Fragment {
         @Override
         public void onBindViewHolder(TaskHolder holder, int position) {
             Task task = mTasks.get(position);
-            holder.bindTask(task);}
+            holder.bindTask(task);
+        }
 
         @Override
         public int getItemCount() {
             return mTasks.size();
+        }
+
+        public void setTasks(List<Task> tasks) {
+            mTasks = tasks;
         }
     }
 }

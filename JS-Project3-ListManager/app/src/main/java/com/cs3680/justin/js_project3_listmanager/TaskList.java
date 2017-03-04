@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cs3680.justin.js_project3_listmanager.database.TaskBaseHelper;
+import com.cs3680.justin.js_project3_listmanager.database.TaskCursorWrapper;
 import com.cs3680.justin.js_project3_listmanager.database.TaskDbSchema;
 
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ import java.util.UUID;
 public class TaskList {
     private static TaskList sTaskList;
 
-    //private List<Task> mTasks;
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
@@ -34,44 +34,48 @@ public class TaskList {
         mContext = context.getApplicationContext();
         mDatabase = new TaskBaseHelper(mContext)
                 .getWritableDatabase();
-        //mTasks = new ArrayList<>();
-        /*for (int i = 1; i <= 10; i++)
-        {
-            Task task = new Task();
-            task.setTitle("Task #" + i);
-            task.setCompleted(i % 2 == 0);
-
-            if (i % 2 == 0){
-                task.setmPriority("HIGH");
-            }else
-            {
-                task.setmPriority("LOW");
-            }
-
-            mTasks.add(task);
-        }*/
     }
 
     public void addTask (Task c) {
        ContentValues values = getContentValues(c);
 
         mDatabase.insert(TaskDbSchema.TaskTable.NAME,null,values);
-
-        //mTasks.add(c);
     }
 
     public List<Task> getTasks() {
-        //return mTasks;
-        return new ArrayList<>();
+        List<Task> tasks = new ArrayList<>();
+
+        TaskCursorWrapper cursor = queryTasks(null, null);
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                tasks.add(cursor.getTask());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return tasks;
     }
 
     public Task getTask (UUID id) {
-        /*for(Task task : mTasks) {
-            if (task.getId().equals(id)) {
-                return task;
+        TaskCursorWrapper cursor = queryTasks(
+                TaskDbSchema.TaskTable.Cols.UUID + " = ?",
+                new String[] {id.toString()}
+        );
+
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
             }
-        }*/
-        return null;
+
+            cursor.moveToFirst();
+            return cursor.getTask();
+        } finally {
+            cursor.close();
+        }
     }
 
     public void  updateTask (Task task) {
@@ -88,14 +92,16 @@ public class TaskList {
         values.put(TaskDbSchema.TaskTable.Cols.UUID, task.getId().toString());
         values.put(TaskDbSchema.TaskTable.Cols.TITLE, task.getTitle());
         values.put(TaskDbSchema.TaskTable.Cols.DUE_DATE, task.getDueDate().getTime());
-        values.put(TaskDbSchema.TaskTable.Cols.COMP_DATE, task.getCompleteDate().getTime());
+        if (task.getCompleteDate() != null) {
+            values.put(TaskDbSchema.TaskTable.Cols.COMP_DATE, task.getCompleteDate().getTime());
+        }
         values.put(TaskDbSchema.TaskTable.Cols.COMPLETED, task.isCompleted());
-        values.put(TaskDbSchema.TaskTable.Cols.PRIORITY, task.getmPriority());
+        values.put(TaskDbSchema.TaskTable.Cols.PRIORITY, task.getPriority());
 
         return values;
     }
 
-    private Cursor queryTasks(String whereClause, String[] whereArgs) {
+    private TaskCursorWrapper queryTasks(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
                 TaskDbSchema.TaskTable.NAME,
                 null, // Columns - null selects all columns
@@ -105,14 +111,12 @@ public class TaskList {
                 null, // having
                 null  // orderBy
         );
-        return cursor;
-    }
-
+        return new TaskCursorWrapper(cursor);
+    };
     /*
     public void removeTask (Task task) {
         mTasks.remove(getTaskPosition(task));
     }
-
 
     public int getTaskPosition (Task task) {
                 return mTasks.indexOf(task);

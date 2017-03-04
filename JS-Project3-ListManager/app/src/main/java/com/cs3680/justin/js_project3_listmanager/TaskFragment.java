@@ -1,7 +1,6 @@
 package com.cs3680.justin.js_project3_listmanager;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -103,7 +102,10 @@ public class TaskFragment extends Fragment {
         });
 
         mCompleteDateText = (TextView) v.findViewById(R.id.task_completed_date);
-        mCompleteDateText.setText(mTask.getCompleteDateText());
+        if (mTask.getCompleteDate() != null)
+        {
+            mCompleteDateText.setText(mTask.getCompleteDate().toString());
+        }
 
         mCompletedCheckbox = (CheckBox)v.findViewById(R.id.task_completed);
         mCompletedCheckbox.setChecked(mTask.isCompleted());
@@ -124,15 +126,12 @@ public class TaskFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         mPrioritySpinner.setAdapter(adapter);
-
-        int pos = adapter.getPosition(mTask.getmPriority());
-
-        mPrioritySpinner.setSelection(pos);
+        mPrioritySpinner.setSelection(adapter.getPosition(mTask.getPriority()));
 
         mPrioritySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mTask.setmPriority(adapter.getItem(position).toString());
+                mTask.setPriority(adapter.getItem(position).toString());
             }
 
             @Override
@@ -156,7 +155,7 @@ public class TaskFragment extends Fragment {
 
     private void updateCompletedDate(Boolean isChecked) {
         if (isChecked == true) {
-            mCompleteDateText.setText(mTask.getCompleteDateText());
+            mCompleteDateText.setText(mTask.getCompleteDate().toString());
         } else {
             mCompleteDateText.setText("");
             mTask.setCompleteDate(null);
@@ -173,7 +172,7 @@ public class TaskFragment extends Fragment {
         if (requestCode == REQUEST_DATE) {
             Date date = (Date) data
                     .getSerializableExtra(DatePickerFragment.EXTRA_DATE);
-            mTask.setmDueDate(date);
+            mTask.setDueDate(date);
             updateDueDate();
         }
     }
