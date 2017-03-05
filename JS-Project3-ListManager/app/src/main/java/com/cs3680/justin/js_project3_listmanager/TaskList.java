@@ -10,6 +10,7 @@ import com.cs3680.justin.js_project3_listmanager.database.TaskCursorWrapper;
 import com.cs3680.justin.js_project3_listmanager.database.TaskDbSchema;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +35,17 @@ public class TaskList {
         mContext = context.getApplicationContext();
         mDatabase = new TaskBaseHelper(mContext)
                 .getWritableDatabase();
+
+        for (int i = 1; i <=10; i++)
+        {
+            Task task = new Task();
+            task.setTitle("Task #" + i);
+            task.setCompleted(i % 2 == 0);
+            if (i % 2 == 0) {
+                task.setCompleteDate(new Date());
+            }
+            this.addTask(task);
+        }
     }
 
     public void addTask (Task c) {
@@ -113,13 +125,12 @@ public class TaskList {
         );
         return new TaskCursorWrapper(cursor);
     };
-    /*
-    public void removeTask (Task task) {
-        mTasks.remove(getTaskPosition(task));
-    }
 
-    public int getTaskPosition (Task task) {
-                return mTasks.indexOf(task);
+    public void removeTask (Task task) {
+        String uuidString = task.getId().toString();
+
+        mDatabase.delete(TaskDbSchema.TaskTable.NAME,
+                TaskDbSchema.TaskTable.Cols.UUID + " = ?",
+                new String[] { uuidString });
     }
-    */
 }

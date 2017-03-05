@@ -62,9 +62,6 @@ public class Task {
 
     public void setCompleted(boolean mCompleted) {
         this.mCompleted = mCompleted;
-        if (this.mCompleted == true) {
-            setCompleteDate(new Date());
-        }
     }
 
     public String getPriority() {

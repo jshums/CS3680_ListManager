@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_priority_spinner"
+        yourapp:showAsAction="ifRoom"
+        yourapp:actionViewClass="android.widget.Spinner"
+        android:title="@string/menu_filter_priority"
+        />
     <item
         android:title="@string/new_task"
         android:id="@+id/menu_item_new_task"
         android:icon="@drawable/ic_menu_add"
-        app:showAsAction="ifRoom|withText"
+        yourapp:showAsAction="ifRoom|withText"
         />
 </menu>

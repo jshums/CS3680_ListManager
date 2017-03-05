@@ -102,8 +102,7 @@ public class TaskFragment extends Fragment {
         });
 
         mCompleteDateText = (TextView) v.findViewById(R.id.task_completed_date);
-        if (mTask.getCompleteDate() != null)
-        {
+        if (mTask.getCompleteDate().after(new Date(0))) {
             mCompleteDateText.setText(mTask.getCompleteDate().toString());
         }
 
@@ -145,7 +144,7 @@ public class TaskFragment extends Fragment {
         mDeleteTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TaskList.get(getActivity()).removeTask(mTask);
+                TaskList.get(getActivity()).removeTask(mTask);
                 getActivity().finish();
             }
         });
@@ -155,10 +154,11 @@ public class TaskFragment extends Fragment {
 
     private void updateCompletedDate(Boolean isChecked) {
         if (isChecked == true) {
+            mTask.setCompleteDate(new Date());
             mCompleteDateText.setText(mTask.getCompleteDate().toString());
         } else {
             mCompleteDateText.setText("");
-            mTask.setCompleteDate(null);
+            mTask.setCompleteDate(new Date(0));
         }
     }
 

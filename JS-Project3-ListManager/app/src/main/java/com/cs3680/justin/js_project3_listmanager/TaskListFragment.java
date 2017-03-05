@@ -3,6 +3,7 @@ package com.cs3680.justin.js_project3_listmanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,9 +12,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,6 +59,15 @@ public class TaskListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_task_list, menu);
+
+        MenuItem item = menu.findItem(R.id.menu_priority_spinner);
+        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getActivity(),
+                R.array.priority_sort_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
     }
 
     @Override
@@ -116,7 +130,7 @@ public class TaskListFragment extends Fragment {
             mDueDateTextView.setText(mTask.getDueDate().toString());
             mCompletedCheckBox.setChecked(mTask.isCompleted());
             mCompletedCheckBox.setEnabled(false);
-            if (mTask.getCompleteDate() != null) {
+            if (mTask.getCompleteDate().after(new Date(0))) {
                 mCompDateTextView.setText(mTask.getCompleteDate().toString());
             }
             if(!mTask.getPriority().equals("[SELECT PRIORITY]")) {
