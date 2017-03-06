@@ -41,9 +41,19 @@ public class TaskList {
             Task task = new Task();
             task.setTitle("Task #" + i);
             task.setCompleted(i % 2 == 0);
+
             if (i % 2 == 0) {
                 task.setCompleteDate(new Date());
             }
+
+            if (i <= 5) {
+                task.setPriority("LOW");
+            } else if (i > 5 && i <= 8) {
+                task.setPriority("MEDIUM");
+            } else if (i > 8) {
+                task.setPriority("HIGH");
+            }
+
             this.addTask(task);
         }
     }
@@ -132,5 +142,23 @@ public class TaskList {
         mDatabase.delete(TaskDbSchema.TaskTable.NAME,
                 TaskDbSchema.TaskTable.Cols.UUID + " = ?",
                 new String[] { uuidString });
+    }
+
+    public List<Task> getTasksByPriority(String filter) {
+        List<Task> tasks = new ArrayList<>();
+
+        TaskCursorWrapper cursor = queryTasks(TaskDbSchema.TaskTable.Cols.PRIORITY + " = ?", new String[] {filter});
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                tasks.add(cursor.getTask());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return tasks;
     }
 }
