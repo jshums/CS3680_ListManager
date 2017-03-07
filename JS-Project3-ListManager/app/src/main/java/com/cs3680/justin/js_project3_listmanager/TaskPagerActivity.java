@@ -17,7 +17,7 @@ import java.util.UUID;
  */
 
 public class TaskPagerActivity extends AppCompatActivity {
-    private static final String EXTRA_TASK_ID = "com.cs3680.jutin.js_project3_listmanager.task_id";
+    private static final String EXTRA_TASK_ID = "com.cs3680.justin.js_project3_listmanager.task_id";
 
 
     private ViewPager mViewPager;
@@ -26,7 +26,7 @@ public class TaskPagerActivity extends AppCompatActivity {
     public static Intent newIntent (Context packageContext, UUID taskId) {
         Intent intent = new Intent(packageContext, TaskPagerActivity.class);
         intent.putExtra(EXTRA_TASK_ID, taskId);
-        return  intent;
+        return intent;
     }
 
 

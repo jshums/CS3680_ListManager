@@ -14,11 +14,17 @@ public class Task {
     private Date mDueDate;
     private Date mCompleteDate;
     private boolean mCompleted;
+    private String mPriority;
 
     public Task() {
-        // Generate unique identifier
-        mId = UUID.randomUUID();
+        this(UUID.randomUUID());
+    }
+
+    public Task(UUID id) {
+        mId = id;
         mDueDate = new Date();
+        mCompleteDate = null;
+        mPriority = "[SELECT PRIORITY]";
     }
 
     public UUID getId(){
@@ -38,20 +44,12 @@ public class Task {
         return mDueDate;
     }
 
-    public void setmDueDate(Date mDueDate) {
+    public void setDueDate(Date mDueDate) {
         this.mDueDate = mDueDate;
     }
 
     public Date getCompleteDate() {
         return mCompleteDate;
-    }
-
-    public String getCompleteDateText() {
-        if (mCompleteDate != null) {
-            return mCompleteDate.toString();
-        } else {
-            return "";
-        }
     }
 
     public void setCompleteDate(Date mCompleteDate) {
@@ -64,8 +62,13 @@ public class Task {
 
     public void setCompleted(boolean mCompleted) {
         this.mCompleted = mCompleted;
-        if (this.mCompleted == true) {
-            setCompleteDate(new Date());
-        }
+    }
+
+    public String getPriority() {
+        return mPriority;
+    }
+
+    public void setPriority(String mPriority) {
+        this.mPriority = mPriority;
     }
 }

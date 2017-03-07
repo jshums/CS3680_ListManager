@@ -3,6 +3,7 @@ package com.cs3680.justin.js_project3_listmanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,9 +12,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,13 +40,11 @@ public class TaskListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
-
+        super.onViewCreated(view,savedInstanceState);
         mTaskRecyclerView = (RecyclerView) view
                 .findViewById(R.id.task_recycler_view);
         mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         updateUI();
-
         return view;
     }
 
@@ -54,6 +58,33 @@ public class TaskListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_task_list, menu);
+
+        MenuItem item = menu.findItem(R.id.menu_priority_spinner);
+        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+
+        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getActivity(),
+                R.array.priority_sort_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String priority = adapter.getItem(position).toString();
+
+                if (priority.equals("HIGH") || priority.equals("MEDIUM") || priority.equals("LOW"))
+                {
+                    updateUIFilter(priority);
+                } else if (priority.equals("ALL")) {
+                    updateUI();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -80,6 +111,21 @@ public class TaskListFragment extends Fragment {
             mAdapter = new TaskAdapter(tasks);
             mTaskRecyclerView.setAdapter(mAdapter);
         } else {
+            mAdapter.setTasks(tasks);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void updateUIFilter(String filter){
+        TaskList taskList = TaskList.get(getActivity());
+
+        List<Task> tasks = taskList.getTasksByPriority(filter);
+
+        if (mAdapter == null) {
+            mAdapter = new TaskAdapter(tasks);
+            mTaskRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.setTasks(tasks);
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -89,6 +135,7 @@ public class TaskListFragment extends Fragment {
         private TextView mCompDateTextView;
         private TextView mDueDateTextView;
         private CheckBox mCompletedCheckBox;
+        private TextView mPriorityTextView;
 
         private Task mTask;
 
@@ -104,6 +151,8 @@ public class TaskListFragment extends Fragment {
                     R.id.list_item_task_due_date_text_view);
             mCompletedCheckBox = (CheckBox) itemView.findViewById(
                     R.id.list_item_task_completed_check_box);
+            mPriorityTextView = (TextView) itemView.findViewById(
+                    R.id.list_item_task_priority);
         }
 
         public void bindTask (Task task){
@@ -112,7 +161,16 @@ public class TaskListFragment extends Fragment {
             mDueDateTextView.setText(mTask.getDueDate().toString());
             mCompletedCheckBox.setChecked(mTask.isCompleted());
             mCompletedCheckBox.setEnabled(false);
-            mCompDateTextView.setText(mTask.getCompleteDateText());
+            if (mTask.getCompleteDate().after(new Date(0))) {
+                mCompDateTextView.setText(mTask.getCompleteDate().toString());
+            }else{
+                mCompDateTextView.setText("");
+            }
+            if(!mTask.getPriority().equals("[SELECT PRIORITY]")) {
+                mPriorityTextView.setText(mTask.getPriority());
+            }else{
+                mPriorityTextView.setText("");
+            }
         }
 
         @Override
@@ -140,11 +198,23 @@ public class TaskListFragment extends Fragment {
         @Override
         public void onBindViewHolder(TaskHolder holder, int position) {
             Task task = mTasks.get(position);
-            holder.bindTask(task);}
+            holder.bindTask(task);
+        }
 
         @Override
         public int getItemCount() {
             return mTasks.size();
         }
+
+        public void setTasks(List<Task> tasks) {
+            mTasks = tasks;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
     }
+
+
 }

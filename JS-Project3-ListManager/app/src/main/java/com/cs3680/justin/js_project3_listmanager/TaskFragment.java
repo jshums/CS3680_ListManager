@@ -10,10 +10,13 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -35,6 +38,7 @@ public class TaskFragment extends Fragment {
     private TextView mCompleteDateText;
     private CheckBox mCompletedCheckbox;
     private Button mDeleteTask;
+    private Spinner mPrioritySpinner;
 
     public static TaskFragment newinstance(UUID taskId) {
         Bundle args = new Bundle();
@@ -50,6 +54,14 @@ public class TaskFragment extends Fragment {
         super.onCreate(savedInstanceState);
         UUID taskId = (UUID) getArguments().getSerializable(ARG_TASK_ID);
         mTask = TaskList.get(getActivity()).getTask(taskId);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        TaskList.get(getActivity())
+                .updateTask(mTask);
     }
 
     @Override
@@ -90,7 +102,10 @@ public class TaskFragment extends Fragment {
         });
 
         mCompleteDateText = (TextView) v.findViewById(R.id.task_completed_date);
-        mCompleteDateText.setText(mTask.getCompleteDateText());
+        if (mTask.getCompleteDate().after(new Date(0))) {
+            mCompleteDateText.setText(mTask.getCompleteDate().toString());
+        }
+
         mCompletedCheckbox = (CheckBox)v.findViewById(R.id.task_completed);
         mCompletedCheckbox.setChecked(mTask.isCompleted());
         mCompletedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
@@ -102,7 +117,29 @@ public class TaskFragment extends Fragment {
             }
         });
 
-        //need to figure out implementation of Delete button
+        mPrioritySpinner = (Spinner) v.findViewById(R.id.task_priority);
+
+
+        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getActivity(),
+                R.array.priority_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        mPrioritySpinner.setAdapter(adapter);
+        mPrioritySpinner.setSelection(adapter.getPosition(mTask.getPriority()));
+
+        mPrioritySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mTask.setPriority(adapter.getItem(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            //auto generated
+            }
+        });
+
+
         mDeleteTask = (Button)v.findViewById(R.id.task_delete);
         mDeleteTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,10 +154,11 @@ public class TaskFragment extends Fragment {
 
     private void updateCompletedDate(Boolean isChecked) {
         if (isChecked == true) {
-            mCompleteDateText.setText(mTask.getCompleteDateText());
+            mTask.setCompleteDate(new Date());
+            mCompleteDateText.setText(mTask.getCompleteDate().toString());
         } else {
             mCompleteDateText.setText("");
-            mTask.setCompleteDate(null);
+            mTask.setCompleteDate(new Date(0));
         }
     }
 
@@ -134,7 +172,7 @@ public class TaskFragment extends Fragment {
         if (requestCode == REQUEST_DATE) {
             Date date = (Date) data
                     .getSerializableExtra(DatePickerFragment.EXTRA_DATE);
-            mTask.setmDueDate(date);
+            mTask.setDueDate(date);
             updateDueDate();
         }
     }
